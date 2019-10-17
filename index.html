@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOKSystem</title>
+    <script src="../jquery/jquery-3.4.1.js"></script>
+</head>
+<body>
+<div>图书管理</div>
+<input type="text" name="name" property="请输入用户名" class="name"><br>
+<input type="password" name="pwd" property="请输入密码" class="pwd"><br>
+<button class="btn">注册</button>
+</body>
+<script>
+    //用户名相同提醒用户事件
+    $(document).on('change','.name',function () {
+        var names = $('.name').val();
+        $.ajax({
+            type:'get',
+            url:'select.php',
+            data:'sename='+names,
+            success:function (res) {
+                console.log(res);
+                var select = $.parseJSON(res);
+                $.each(select,function (idx,val) {
+                     if (val.name==names){
+                        alert('用户名已被使用');
+                         $('.btn').attr('disabled',true);
+                    }else {
+                         $('.btn').attr('disabled',false);
+                     }
+                })
+            }
+        })
+    })
+    //提交用户输入的用户名密码
+    $('.btn').click(function () {
+            // alert('00');
+            var name = $('.name').val();
+            var pwd = $('.pwd').val();
+            $.ajax({
+                type: 'post',
+                url: 'reg.php',
+                data: 'name='+name+'&pwd='+pwd,
+                success:function (ress) {
+                    console.log(ress);
+                    window.location.href="login.html";
+                }
+            })
+        }
+    )
+
+</script>
+</html>

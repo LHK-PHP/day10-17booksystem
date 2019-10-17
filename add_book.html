@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加图书</title>
+    <script src="../jquery/jquery-3.4.1.js"></script>
+</head>
+<body>
+书名:<input type="text" class="name">
+作者: <input type="text" class="author">
+<button class="btn">添加</button>
+</body>
+<script>
+    $('.btn').click(function () {
+        var name = $('.name').val();
+        var author = $('.author').val();
+            $.ajax({
+                type:'get',
+                url:'add_book.php',
+                data:'name='+name+'&author='+author,
+                success:function (res) {
+                    console.log(res);
+                    window.location.href="BOOK.html"
+                }
+            })
+        })
+
+</script>
+</html>

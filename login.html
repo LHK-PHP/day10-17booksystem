@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="../jquery/jquery-3.4.1.js"></script>
+</head>
+<body>
+用户名:<input type="text" class="name"><br>
+密码:<input type="password" class="pwd"><br>
+<button class="login">登录</button><br>
+<button>没有用户名</button>
+</body>
+<script>
+    $('.login').click(function () {
+        var name = $('.name').val();
+        var pwd = $('.pwd').val();
+        $.ajax({
+            type:'get',
+            url:'login.php',
+            data:'name='+name+'&pwd='+pwd,
+            success:function (res) {
+                console.log(res);
+                var arr = $.parseJSON(res);
+                $.each(arr,function (inx,val) {
+                    if (val.name==name&val.pwd==pwd){
+                        window.location.href="BOOK.html";
+                    }else if (val.name==name&val.pwd!=pwd){
+                        alert('密码错误请重新输入');}
+                    else if(!(val.name !=name)) {
+                           alert('请先注册用户名');
+                           window.location.href = "index.html"; return false;
+                       }
+                })
+            }
+        })
+    })
+</script>
+</html>

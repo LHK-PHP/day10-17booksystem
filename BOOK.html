@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图书信息</title>
+    <script src="../jquery/jquery-3.4.1.js"></script>
+</head>
+<body>
+<table>
+    <tr class="table">
+        <td>图书ID</td>
+        <td>书名</td>
+        <td>作者</td>
+        <td>操作</td>
+    </tr>
+</table>
+<button class="btn">添加</button>
+</body>
+<script>
+    $('.btn').click(function () {
+        window.location.href="add_book.html"
+    })
+    //查找书的信息
+    $.ajax({
+        type:'get',
+        url:'Book_select.php',
+        success:function (res) {
+            // console.log(res);
+            var book = $.parseJSON(res);
+            $.each(book,function (idx,val) {
+                // console.log(val.id);
+                // alert('0');
+// var text = "<tr><td class='id'>"+val.id+"</td><td>"+val.book_name+"</td><td>"+val.book_author+"</td><td>"+"<button class='delect'>删除</button>"+"<button class='update'>修改</button>"+"</td></tr>";
+                $('.table').after("<tr class='doc'><td class='id'>"+val.id+"</td><td>"+val.book_name+"</td><td>"+val.book_author+"</td><td>"+"<button class='delect'>删除</button>"+"<button class='update'>修改</button>"+"</td></tr>");
+            })
+        }
+    })
+    //进行添加跳转
+
+    //删除
+    $(document).on('click','.delect',function () {
+        var index = $('.id').index();
+        var id = $('.id').eq(index).text();
+        // console.log(id);
+        $.ajax({
+            type:'get',
+            url:'delect.php',
+            data:'id='+id,
+            success:function (res) {
+                $('.doc').eq(index).remove();
+
+            }
+        })
+    })
+    //修改
+    var id
+    $(document).on('click','.update',function () {
+        var index = $('.id').index();
+         id= $('.id').eq(index).text();
+        // console.log(id);
+        // alert('hello');
+        $.ajax({
+            type:'get',
+            url:'update.php',
+            data:'uid='+id,
+            success:function (resp) {
+                // console.log(resp);
+              var array = $.parseJSON(resp);
+                $.each(array,function (index,value) {
+                   // alert('000');
+ $('table').replaceWith("书名:<input type='text' class='name' value="+value.book_name+">作者: <input type= 'text' class='author' value="+value.book_author+"><button class='update_btn'>确认修改</button>")
+                })
+
+            }
+        })
+    })
+    $(document).on('click','.update_btn',function () {
+        var bookname = $('.name').val();
+        var bookauthor = $('.author').val();
+        console.log(id);
+        $.ajax({
+            type:'get',
+            url:'request.php',
+            data:'bname='+bookname+'&bauthor='+bookauthor+'&id='+id,
+            success:function (resp) {
+                // alert('hello');
+                console.log(resp);
+                window.location.href="BOOK.html";
+            }
+        })
+    })
+</script>
+</html>
